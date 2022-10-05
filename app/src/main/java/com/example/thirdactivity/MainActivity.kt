@@ -1,12 +1,20 @@
 package com.example.thirdactivity
 
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import com.example.thirdactivity.api.RestApiService
+import com.example.thirdactivity.api.UserInfo
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
+import java.net.URL
+
 
 class MainActivity : AppCompatActivity() {
     lateinit var prenomLabel : TextView;
@@ -75,11 +83,30 @@ class MainActivity : AppCompatActivity() {
 
         return valid;
     }
+    private fun sendData() {
+        val apiService = RestApiService()
+        val userInfo = UserInfo(
+            id = null,
+            prenom = prenom.text.toString(),
+            nom = nom.text.toString(),
+            email = email.text.toString()
+        )
+        println(userInfo);
+
+        apiService.addUser(userInfo) {
+            if (it?.id != null) {
+               println("userRegistred")
+            } else {
+                println("Error registering new user")
+            }
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         this.init();
         val inputs = mutableListOf(prenom,nom,email);
+        println("test")
         submit.setOnClickListener {
             for (input in inputs) {
                 this.validate(input);
@@ -93,6 +120,11 @@ class MainActivity : AppCompatActivity() {
                 alertDialogBuilder.setPositiveButton("Yes") { dialog, which ->
                     Toast.makeText(applicationContext,
                         "Form submitted", Toast.LENGTH_SHORT).show()
+                    this.sendData();
+                    prenom.setText("");
+                    nom.setText("");
+                    email.setText("");
+                    terms.isChecked = false;
                 };
                 alertDialogBuilder.setNegativeButton("No"){ dialog, which ->
                     Toast.makeText(applicationContext,
