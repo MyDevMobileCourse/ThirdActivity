@@ -9,11 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import com.example.thirdactivity.api.RestApiService
 import com.example.thirdactivity.api.UserInfo
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
-import java.net.HttpURLConnection
-import java.net.URL
 
 
 class MainActivity : AppCompatActivity() {
@@ -26,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var terms : CheckBox;
     lateinit var submit : Button;
     lateinit var cancel : Button;
+
     private fun init() {
         prenomLabel = findViewById(R.id.prenomLabel);
         nomLabel = findViewById(R.id.nomLabel);
@@ -91,8 +87,6 @@ class MainActivity : AppCompatActivity() {
             nom = nom.text.toString(),
             email = email.text.toString()
         )
-        println(userInfo);
-
         apiService.addUser(userInfo) {
             if (it?.id != null) {
                println("userRegistred")
@@ -106,6 +100,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         this.init();
         val inputs = mutableListOf(prenom,nom,email);
+
         println("test")
         submit.setOnClickListener {
             for (input in inputs) {
@@ -125,6 +120,7 @@ class MainActivity : AppCompatActivity() {
                     nom.setText("");
                     email.setText("");
                     terms.isChecked = false;
+                    
                 };
                 alertDialogBuilder.setNegativeButton("No"){ dialog, which ->
                     Toast.makeText(applicationContext,
@@ -132,9 +128,6 @@ class MainActivity : AppCompatActivity() {
                 };
                 alertDialogBuilder.show();
             }
-
-
-
         }
 
         cancel.setOnClickListener {
@@ -158,5 +151,19 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    override fun onBackPressed() {
+        val alertDialogBuilder = AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("Quit");
+        alertDialogBuilder.setMessage("are you sure you want to quit ?  ?");
+        alertDialogBuilder.setPositiveButton("Yes") { dialog, which ->
+            super.onBackPressed()
+        };
+        alertDialogBuilder.setNegativeButton("No"){ dialog, which ->
+            Toast.makeText(applicationContext,
+                "Canceled", Toast.LENGTH_SHORT).show()
+        };
+        alertDialogBuilder.show();
     }
 }
