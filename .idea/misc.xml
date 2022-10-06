@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/progressdialog.xml" value="0.19391530354817707" />
         <entry key="app/src/main/res/layout/shake.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/xml/shake.xml" value="0.19610507246376813" />
       </map>

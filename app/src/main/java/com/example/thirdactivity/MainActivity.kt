@@ -2,6 +2,8 @@ package com.example.thirdactivity
 
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -100,7 +102,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         this.init();
         val inputs = mutableListOf(prenom,nom,email);
-
         println("test")
         submit.setOnClickListener {
             for (input in inputs) {
@@ -113,14 +114,27 @@ class MainActivity : AppCompatActivity() {
                 alertDialogBuilder.setTitle("Submit");
                 alertDialogBuilder.setMessage("Do you wanna submit ?");
                 alertDialogBuilder.setPositiveButton("Yes") { dialog, which ->
-                    Toast.makeText(applicationContext,
-                        "Form submitted", Toast.LENGTH_SHORT).show()
+                    val loadingDialog = AlertDialog.Builder(this);
+                    val dialog = loadingDialog.create();
+                    val dialogLayout = layoutInflater.inflate(R.layout.progressdialog,null);
+                    val loading = dialogLayout.findViewById<ProgressBar>(R.id.loading_bar);
+                    dialog.setView(dialogLayout);
+                    dialog.setCancelable(false);
+                    dialog.show();
                     this.sendData();
-                    prenom.setText("");
-                    nom.setText("");
-                    email.setText("");
-                    terms.isChecked = false;
-                    
+                    Handler(Looper.getMainLooper()).postDelayed({
+
+                        prenom.setText("");
+                        nom.setText("");
+                        email.setText("");
+                        terms.isChecked = false;
+                        dialog.dismiss()
+                        Toast.makeText(applicationContext,
+                            "Form submitted", Toast.LENGTH_SHORT).show()
+                        },2500);
+
+
+
                 };
                 alertDialogBuilder.setNegativeButton("No"){ dialog, which ->
                     Toast.makeText(applicationContext,
