@@ -8,23 +8,26 @@ import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
 import com.example.thirdactivity.api.RestApiService
 import com.example.thirdactivity.api.UserInfo
-
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
-    lateinit var prenomLabel : TextView;
-    lateinit var nomLabel : TextView;
-    lateinit var emailLabel : TextView;
-    lateinit var prenom : EditText;
-    lateinit var nom : EditText;
-    lateinit var email : EditText;
-    lateinit var terms : CheckBox;
-    lateinit var submit : Button;
-    lateinit var cancel : Button;
+    lateinit var root: ConstraintLayout;
+    lateinit var prenomLabel: TextView;
+    lateinit var nomLabel: TextView;
+    lateinit var emailLabel: TextView;
+    lateinit var prenom: EditText;
+    lateinit var nom: EditText;
+    lateinit var email: EditText;
+    lateinit var terms: CheckBox;
+    lateinit var submit: Button;
+    lateinit var cancel: Button;
 
     private fun init() {
+        root = findViewById(R.id.root);
         prenomLabel = findViewById(R.id.prenomLabel);
         nomLabel = findViewById(R.id.nomLabel);
         emailLabel = findViewById(R.id.emailLabel);
@@ -35,14 +38,17 @@ class MainActivity : AppCompatActivity() {
         submit = findViewById(R.id.submit);
         cancel = findViewById(R.id.cancel);
     }
+
     private fun isNotValid(label: TextView) {
         label.setTextColor(Color.RED);
         val animation = AnimationUtils.loadAnimation(this, R.anim.shake);
         label.startAnimation(animation);
     }
+
     private fun isValid(label: TextView) {
         label.setTextColor(Color.BLACK);
     }
+
     private fun validate(input: EditText) {
         var label = when (input) {
             prenom -> {
@@ -55,20 +61,21 @@ class MainActivity : AppCompatActivity() {
                 emailLabel;
             }
         }
-        if(input.text.isBlank()){
+        if (input.text.isBlank()) {
             this.isNotValid(label);
-        }else{
+        } else {
             this.isValid(label);
         }
-        if(input == email){
+        if (input == email) {
 
-            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(input.text).matches()){
+            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(input.text).matches()) {
                 this.isNotValid(emailLabel);
-            }else{
+            } else {
                 this.isValid(emailLabel);
             }
         }
     }
+
     private fun isAllValid(): Boolean {
         var valid =
             if (prenom.text.isBlank())
@@ -81,6 +88,7 @@ class MainActivity : AppCompatActivity() {
 
         return valid;
     }
+
     private fun sendData() {
         val apiService = RestApiService()
         val userInfo = UserInfo(
@@ -89,56 +97,60 @@ class MainActivity : AppCompatActivity() {
             nom = nom.text.toString(),
             email = email.text.toString()
         )
+        val loadingDialog = AlertDialog.Builder(this);
+        val dialog = loadingDialog.create();
+        val dialogLayout = layoutInflater.inflate(R.layout.progressdialog, null);
+        dialog.setView(dialogLayout);
+        dialog.setCancelable(false);
+        dialog.show();
         apiService.addUser(userInfo) {
             if (it?.id != null) {
-               println("userRegistred")
+                prenom.setText("");
+                nom.setText("");
+                email.setText("");
+                terms.isChecked = false;
+                val snackBar: Snackbar = Snackbar.make(root,"Creation done",Snackbar.LENGTH_LONG);
+                snackBar.setTextColor(Color.GREEN);
+                snackBar.show();
+
             } else {
-                println("Error registering new user")
+                val snackBar: Snackbar =
+                    Snackbar.make(root, "Creation Failed", Snackbar.LENGTH_INDEFINITE);
+                snackBar.setAction("Retry") {
+                    sendData();
+                }
+                snackBar.setActionTextColor(Color.RED);
+                Handler(Looper.getMainLooper()).postDelayed({snackBar.dismiss()},7500);
+                snackBar.show();
             }
+            dialog.dismiss();
         }
+
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         this.init();
-        val inputs = mutableListOf(prenom,nom,email);
-        println("test")
+        val inputs = mutableListOf(prenom, nom, email);
         submit.setOnClickListener {
             for (input in inputs) {
                 this.validate(input);
             }
-            if (!terms.isChecked){
+            if (!terms.isChecked) {
                 this.isNotValid(terms);
-            }else {
+            } else {
                 val alertDialogBuilder = AlertDialog.Builder(this);
                 alertDialogBuilder.setTitle("Submit");
                 alertDialogBuilder.setMessage("Do you wanna submit ?");
                 alertDialogBuilder.setPositiveButton("Yes") { dialog, which ->
-                    val loadingDialog = AlertDialog.Builder(this);
-                    val dialog = loadingDialog.create();
-                    val dialogLayout = layoutInflater.inflate(R.layout.progressdialog,null);
-                    val loading = dialogLayout.findViewById<ProgressBar>(R.id.loading_bar);
-                    dialog.setView(dialogLayout);
-                    dialog.setCancelable(false);
-                    dialog.show();
-                    this.sendData();
-                    Handler(Looper.getMainLooper()).postDelayed({
-
-                        prenom.setText("");
-                        nom.setText("");
-                        email.setText("");
-                        terms.isChecked = false;
-                        dialog.dismiss()
-                        Toast.makeText(applicationContext,
-                            "Form submitted", Toast.LENGTH_SHORT).show()
-                        },2500);
-
-
-
+                this.sendData();
                 };
-                alertDialogBuilder.setNegativeButton("No"){ dialog, which ->
-                    Toast.makeText(applicationContext,
-                        "Canceled", Toast.LENGTH_SHORT).show()
+                alertDialogBuilder.setNegativeButton("No") { dialog, which ->
+                    Toast.makeText(
+                        applicationContext,
+                        "Canceled", Toast.LENGTH_SHORT
+                    ).show()
                 };
                 alertDialogBuilder.show();
             }
@@ -152,15 +164,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         // validate inputs on change
-        for (input in inputs){
-            input.addTextChangedListener{
+        for (input in inputs) {
+            input.addTextChangedListener {
                 this.validate(input);
             }
         }
         terms.setOnClickListener {
-            if(!terms.isChecked) {
+            if (!terms.isChecked) {
                 this.isNotValid(terms);
-            }else {
+            } else {
                 this.isValid(terms);
             }
         }
@@ -174,9 +186,11 @@ class MainActivity : AppCompatActivity() {
         alertDialogBuilder.setPositiveButton("Yes") { dialog, which ->
             super.onBackPressed()
         };
-        alertDialogBuilder.setNegativeButton("No"){ dialog, which ->
-            Toast.makeText(applicationContext,
-                "Canceled", Toast.LENGTH_SHORT).show()
+        alertDialogBuilder.setNegativeButton("No") { dialog, which ->
+            Toast.makeText(
+                applicationContext,
+                "Canceled", Toast.LENGTH_SHORT
+            ).show()
         };
         alertDialogBuilder.show();
     }
