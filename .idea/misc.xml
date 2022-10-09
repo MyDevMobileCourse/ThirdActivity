@@ -5,6 +5,11 @@
       <map>
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/all_items.xml" value="0.1125" />
+        <entry key="app/src/main/res/layout/form_fragment.xml" value="0.11354166666666667" />
+        <entry key="app/src/main/res/layout/fragment_first.xml" value="0.11354166666666667" />
+        <entry key="app/src/main/res/layout/fragment_second.xml" value="0.11354166666666667" />
+        <entry key="app/src/main/res/layout/home_fragment.xml" value="0.11354166666666667" />
+        <entry key="app/src/main/res/layout/nav_host_fragment.xml" value="0.1125" />
         <entry key="app/src/main/res/layout/navigation_activity.xml" value="0.1125" />
         <entry key="app/src/main/res/layout/progressdialog.xml" value="0.19391530354817707" />
         <entry key="app/src/main/res/layout/shake.xml" value="0.19610507246376813" />
