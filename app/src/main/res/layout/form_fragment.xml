@@ -92,25 +92,29 @@
         app:layout_constraintStart_toStartOf="@+id/email"
         app:layout_constraintTop_toBottomOf="@+id/email" />
 
-    <Button
-        android:id="@+id/cancel"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
+        android:layout_height="72dp"
         android:layout_marginTop="24dp"
-        android:backgroundTint="@color/design_default_color_error"
-        android:text="Cancel"
-        app:layout_constraintStart_toEndOf="@+id/submit"
-        app:layout_constraintTop_toBottomOf="@+id/terms" />
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/terms">
 
-    <Button
-        android:id="@+id/submit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="33dp"
-        android:layout_marginTop="24dp"
-        android:text="Submit"
-        app:layout_constraintStart_toStartOf="@+id/terms"
-        app:layout_constraintTop_toBottomOf="@+id/terms" />
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:backgroundTint="@color/design_default_color_error"
+            android:text="Cancel" />
+
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="Submit" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
