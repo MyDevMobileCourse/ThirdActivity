@@ -22,4 +22,21 @@ class RestApiService {
             }
         )
     }
+    fun getUsers(onResult: (List<UserInfo>?) -> Unit){
+        val retrofit = ServiceBuilder.buildService(RestApi::class.java)
+        retrofit.getUsers().enqueue(
+            object : Callback<List<UserInfo>> {
+                override fun onFailure(call: Call<List<UserInfo>>, t: Throwable) {
+                    println(t.message);
+                    println(t);
+                    onResult(null)
+                }
+                override fun onResponse( call: Call<List<UserInfo>>, response: Response<List<UserInfo>>) {
+                    val addedUser = response.body()
+                    println(response);
+                    onResult(addedUser)
+                }
+            }
+        )
+    }
 }
