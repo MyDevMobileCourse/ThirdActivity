@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.thirdactivity.api.RestApiService
 import com.example.thirdactivity.api.UserInfo
 import com.example.thirdactivity.databinding.HomeFragmentBinding
-
+import com.google.android.material.snackbar.Snackbar
 
 class Home : Fragment() {
     private var reView : RecyclerView? = null
@@ -42,6 +42,7 @@ class Home : Fragment() {
         reView!!.layoutManager = LinearLayoutManager(requireContext())
         mAdapter = ListAdapter(requireContext(), mUsers, com.example.thirdactivity.R.layout.user_item)
         reView!!.adapter = mAdapter
+
         fetchUsers();
     }
 

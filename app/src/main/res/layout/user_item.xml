@@ -108,6 +108,7 @@
             android:layout_marginLeft="3dp"
             android:layout_weight="1"
             android:backgroundTint="#E91E63"
+
             android:text="Delete" />
     </LinearLayout>
 </LinearLayout>

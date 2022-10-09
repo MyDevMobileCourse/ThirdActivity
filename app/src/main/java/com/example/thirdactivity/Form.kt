@@ -207,6 +207,5 @@ class Form : Fragment() {
                 dialog.dismiss()
             }
         }
-
     }
 

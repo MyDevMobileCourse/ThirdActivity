@@ -39,4 +39,20 @@ class RestApiService {
             }
         )
     }
+
+    fun deleteUser(id: Int, onResult: (Boolean?) -> Unit){
+        val retrofit = ServiceBuilder.buildService(RestApi::class.java)
+        retrofit.deleteUser(id).enqueue(
+            object : Callback<Boolean?> {
+                override fun onFailure(call: Call<Boolean?>, t: Throwable) {
+                    println("failed to delete")
+                    onResult(false)
+                }
+                override fun onResponse(call: Call<Boolean?>, response: Response<Boolean?>) {
+                    println("deleted")
+                    onResult(true)
+                }
+            }
+        )
+    }
 }
