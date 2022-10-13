@@ -24,6 +24,7 @@ class ListAdapter(private val context: Context, private val mUsers: MutableList<
         holder.prenom.text = user.prenom
         holder.nom.text = user.nom
         holder.email.text = user.email
+        holder.classe.text = user.classe
         holder.delete.setOnClickListener {
             showDeleteDialog(user)
         }
@@ -37,6 +38,7 @@ class ListAdapter(private val context: Context, private val mUsers: MutableList<
         val prenom: TextView = itemView.findViewById(R.id.prenomF)
         val nom: TextView = itemView.findViewById(R.id.nomF)
         val email: TextView = itemView.findViewById(R.id.emailF)
+        val classe: TextView = itemView.findViewById(R.id.classeF)
         val delete: Button = itemView.findViewById(R.id.delete)
 
     }

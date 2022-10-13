@@ -87,10 +87,48 @@
         android:id="@+id/terms"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="145dp"
+        android:layout_marginTop="24dp"
         android:text="I agree to all terms and conditions"
         app:layout_constraintStart_toStartOf="@+id/email"
+        app:layout_constraintTop_toBottomOf="@+id/date_naissance" />
+
+    <TextView
+        android:id="@+id/classLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Classe :"
+        app:layout_constraintStart_toStartOf="@+id/email"
         app:layout_constraintTop_toBottomOf="@+id/email" />
+
+    <Spinner
+        android:id="@+id/classSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:minHeight="32dp"
+        app:layout_constraintStart_toStartOf="@+id/classLabel"
+        app:layout_constraintTop_toBottomOf="@+id/classLabel" />
+
+    <TextView
+        android:id="@+id/date_naissanceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="@+id/classSpinner"
+        app:layout_constraintTop_toBottomOf="@+id/classSpinner"
+        android:text="Date de naissance :"
+    />
+
+    <TextView
+        android:id="@+id/date_naissance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/date_naissanceLabel"
+        app:layout_constraintTop_toBottomOf="@+id/date_naissanceLabel"
+        android:text="dd/mm/yyyy"
+        />
 
     <LinearLayout
         android:layout_width="wrap_content"

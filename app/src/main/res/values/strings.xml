@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">ThirdActivity</string>
+    <string-array name="classes">
+        <item>DSI2</item>
+        <item>DSI3</item>
+        <item>RSI2</item>
+        <item>RSI3</item>
+        <item>SEM2</item>
+        <item>SEM3</item>
+    </string-array>
 </resources>

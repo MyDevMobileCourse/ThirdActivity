@@ -1,3 +1,18 @@
 {
-  "data": []
+  "data": [
+    {
+      "email": "jjjj@jjj.kkk",
+      "nom": "jjj",
+      "prenom": "jjj",
+      "id": 1,
+      "classe": "DSI2"
+    },
+    {
+      "classe": "SEM2",
+      "email": "test@test.test",
+      "nom": "test",
+      "prenom": "test",
+      "id": 2
+    }
+  ]
 }

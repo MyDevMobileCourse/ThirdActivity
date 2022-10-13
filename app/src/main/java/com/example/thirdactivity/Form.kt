@@ -1,5 +1,6 @@
 package com.example.thirdactivity
 
+import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -19,6 +20,8 @@ import com.example.thirdactivity.api.RestApiService
 import com.example.thirdactivity.api.UserInfo
 import com.example.thirdactivity.databinding.FormFragmentBinding
 import com.google.android.material.snackbar.Snackbar
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class Form : Fragment() {
@@ -35,13 +38,13 @@ class Form : Fragment() {
     private var terms: CheckBox? = null
     private var submit: Button? = null
     private var cancel: Button? = null
-
-
+    private var spinner: Spinner? = null
+    private var date: TextView? = null
+    private var dateLabel: TextView? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
         ): View {
-
             _binding = FormFragmentBinding.inflate(inflater, container, false)
             return binding.root
     }
@@ -49,10 +52,16 @@ class Form : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
                 this.init()
-        val inputs = mutableListOf(prenom, nom, email)
+        val inputs = mutableListOf(prenom, nom, email, date)
         submit?.setOnClickListener {
             for (input in inputs) {
-                this.validate(input)
+                if(input == date){
+                    if(input?.text == "dd/mm/yyyy") {
+                        this.isNotValid(dateLabel)
+                    }
+                }else{
+                    this.validate(input as EditText)
+                }
             }
             if (!terms?.isChecked!!) {
                 this.isNotValid(terms)
@@ -79,7 +88,7 @@ class Form : Fragment() {
 
         for (input in inputs) {
             input?.addTextChangedListener {
-                this.validate(input)
+                this.validate(input as EditText?)
             }
         }
         terms?.setOnClickListener {
@@ -102,6 +111,43 @@ class Form : Fragment() {
         terms = _binding?.terms
         submit = _binding?.submit
         cancel = _binding?.cancel
+        spinner = binding.classSpinner
+        date = binding.dateNaissance
+        dateLabel = binding.dateNaissanceLabel
+        this.initSpinner()
+        this.initDatePicker()
+    }
+    private fun initDatePicker(){
+        var cal = Calendar.getInstance()
+
+        val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+            cal.set(Calendar.YEAR, year)
+            cal.set(Calendar.MONTH, monthOfYear)
+            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+            val myFormat = "dd.MM.yyyy" // mention the format you need
+            val sdf = SimpleDateFormat(myFormat, Locale.US)
+                date!!.text = sdf.format(cal.time)
+
+        }
+
+        date?.setOnClickListener {
+            DatePickerDialog(requireContext(), dateSetListener,
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)).show()
+        }
+    }
+    private fun initSpinner(){
+        var listOfItems = arrayOf("DSI2","DSI3","RSI2","RSI3","SEM2","SEM3")
+        spinner!!.setOnItemSelectedListener(null)
+        val array_adapter =
+            context?.let { ArrayAdapter(it, android.R.layout.simple_spinner_item, listOfItems) }
+        if (array_adapter != null) {
+            array_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
+        spinner!!.setAdapter(array_adapter)
+
     }
 
     private fun isNotValid(label: TextView?) {
@@ -135,7 +181,6 @@ class Form : Fragment() {
                 this.isValid(label)
             }
             if (input == email) {
-
                 if (!Patterns.EMAIL_ADDRESS.matcher(input.text).matches()) {
                     this.isNotValid(emailLabel)
                 } else {
@@ -174,7 +219,8 @@ class Form : Fragment() {
             id = null,
             prenom = prenom?.text.toString(),
             nom = nom?.text.toString(),
-            email = email?.text.toString()
+            email = email?.text.toString(),
+            classe = spinner?.selectedItem.toString()
         )
             val loadingDialog = AlertDialog.Builder(requireContext())
             val dialog = loadingDialog.create()
